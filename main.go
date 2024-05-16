@@ -16,10 +16,8 @@ func main() {
 		log.Fatalf("Error initializing app: %s", err)
 	}
 
-	// Crea un nuevo middleware de CORS
 	corsMiddleware := cors.Default().Handler
 
-	// Usa el middleware de CORS con el manejador HTTP
 	http.Handle("/usuarios", corsMiddleware(http.HandlerFunc(app.Controller.HandleUsuarios)))
 
 	log.Fatal(http.ListenAndServe(":8000", nil))
