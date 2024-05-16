@@ -1,10 +1,10 @@
 package main
 
 import (
+	"github/galvizlaura69/backGo/controller"
+	"github/galvizlaura69/backGo/model"
 	"log"
 	"net/http"
-
-	"github.com/galvizlaura69/backGo/model"
 )
 
 func main() {

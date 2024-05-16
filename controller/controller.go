@@ -6,7 +6,8 @@ import (
 	"log"
 	"net/http"
 
-	"github.com/galvizlaura69/backGo/model"
+	"github/galvizlaura69/backGo/model"
+
 	"go.mongodb.org/mongo-driver/bson"
 )
 
