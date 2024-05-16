@@ -4,6 +4,8 @@ import (
 	"log"
 	"net/http"
 
+	"github.com/rs/cors"
+
 	"github/galvizlaura69/backGo/controller"
 	"github/galvizlaura69/backGo/model"
 )
@@ -14,7 +16,12 @@ func main() {
 		log.Fatalf("Error initializing app: %s", err)
 	}
 
-	http.HandleFunc("/usuarios", app.Controller.HandleUsuarios)
+	// Crea un nuevo middleware de CORS
+	corsMiddleware := cors.Default().Handler
+
+	// Usa el middleware de CORS con el manejador HTTP
+	http.Handle("/usuarios", corsMiddleware(http.HandlerFunc(app.Controller.HandleUsuarios)))
+
 	log.Fatal(http.ListenAndServe(":8000", nil))
 }
 
