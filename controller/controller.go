@@ -17,7 +17,16 @@ func HandleUsuarios(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	cursor, err := model.Collection.Find(context.TODO(), bson.D{})
+	// Obtener el valor del parámetro 'documento' de la query
+	documento := r.URL.Query().Get("documento")
+	if documento == "" {
+		http.Error(w, "Missing documento parameter", http.StatusBadRequest)
+		return
+	}
+
+	// Realizar la consulta a la base de datos para obtener el usuario con ese documento
+	filter := bson.D{{"documento", documento}}
+	cursor, err := model.Collection.Find(context.TODO(), filter)
 	if err != nil {
 		log.Println("Error al buscar usuarios en la base de datos:", err)
 		http.Error(w, "Error fetching data", http.StatusInternalServerError)
