@@ -7,9 +7,15 @@ import (
 	"go.mongodb.org/mongo-driver/mongo/options"
 )
 
-var Collection *mongo.Collection
+type Model struct {
+	Collection *mongo.Collection
+}
 
-func InitDB() error {
+func NewModel() *Model {
+	return &Model{}
+}
+
+func (m *Model) InitDB() error {
 	clientOptions := options.Client().ApplyURI("mongodb+srv://galvizlaura69:Canela30+@cluster0.cegzqm2.mongodb.net/?retryWrites=true&w=majority&appName=Cluster0")
 	client, err := mongo.Connect(context.TODO(), clientOptions)
 	if err != nil {
@@ -21,6 +27,6 @@ func InitDB() error {
 		return err
 	}
 
-	Collection = client.Database("test").Collection("usuarios")
+	m.Collection = client.Database("test").Collection("usuarios")
 	return nil
 }

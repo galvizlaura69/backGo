@@ -1,17 +1,39 @@
 package main
 
 import (
-	"github/galvizlaura69/backGo/controller"
-	"github/galvizlaura69/backGo/model"
 	"log"
 	"net/http"
+
+	"github/galvizlaura69/backGo/controller"
+	"github/galvizlaura69/backGo/model"
 )
 
 func main() {
-	if err := model.InitDB(); err != nil {
-		log.Fatal("Error al conectar a MongoDB:", err)
+	app := NewApp()
+	if err := app.Init(); err != nil {
+		log.Fatalf("Error initializing app: %s", err)
 	}
 
-	http.HandleFunc("/usuarios", controller.HandleUsuarios)
+	http.HandleFunc("/usuarios", app.Controller.HandleUsuarios)
 	log.Fatal(http.ListenAndServe(":8000", nil))
+}
+
+type App struct {
+	Model      *model.Model
+	Controller *controller.Controller
+}
+
+func NewApp() *App {
+	modelInstance := model.NewModel()
+	return &App{
+		Model:      modelInstance,
+		Controller: controller.NewController(modelInstance),
+	}
+}
+
+func (a *App) Init() error {
+	if err := a.Model.InitDB(); err != nil {
+		return err
+	}
+	return nil
 }

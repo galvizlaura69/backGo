@@ -11,22 +11,30 @@ import (
 	"go.mongodb.org/mongo-driver/bson"
 )
 
-func HandleUsuarios(w http.ResponseWriter, r *http.Request) {
+type Controller struct {
+	Model *model.Model
+}
+
+func NewController(model *model.Model) *Controller {
+	return &Controller{
+		Model: model,
+	}
+}
+
+func (c *Controller) HandleUsuarios(w http.ResponseWriter, r *http.Request) {
 	if r.Method != http.MethodGet {
 		http.Error(w, "Method not allowed", http.StatusMethodNotAllowed)
 		return
 	}
 
-	// Obtener el valor del parámetro 'documento' de la query
 	documento := r.URL.Query().Get("documento")
 	if documento == "" {
 		http.Error(w, "Missing documento parameter", http.StatusBadRequest)
 		return
 	}
 
-	// Realizar la consulta a la base de datos para obtener el usuario con ese documento
 	filter := bson.D{{"documento", documento}}
-	cursor, err := model.Collection.Find(context.TODO(), filter)
+	cursor, err := c.Model.Collection.Find(context.TODO(), filter)
 	if err != nil {
 		log.Println("Error al buscar usuarios en la base de datos:", err)
 		http.Error(w, "Error fetching data", http.StatusInternalServerError)
