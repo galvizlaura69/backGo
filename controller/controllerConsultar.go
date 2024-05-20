@@ -11,17 +11,17 @@ import (
 	"go.mongodb.org/mongo-driver/bson"
 )
 
-type Controller struct {
+type ControllerConsultar struct {
 	Model *model.Model
 }
 
-func NewController(model *model.Model) *Controller {
-	return &Controller{
+func NewControllerConsultar(model *model.Model) *ControllerConsultar {
+	return &ControllerConsultar{
 		Model: model,
 	}
 }
 
-func (c *Controller) HandleUsuarios(w http.ResponseWriter, r *http.Request) {
+func (c *ControllerConsultar) HandleUsuarios(w http.ResponseWriter, r *http.Request) {
 	if r.Method != http.MethodGet {
 		http.Error(w, "Method not allowed", http.StatusMethodNotAllowed)
 		return

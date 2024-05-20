@@ -18,21 +18,30 @@ func main() {
 
 	corsMiddleware := cors.Default().Handler
 
-	http.Handle("/usuarios", corsMiddleware(http.HandlerFunc(app.Controller.HandleUsuarios)))
+	http.Handle("/consultar", corsMiddleware(http.HandlerFunc(app.ControllerConsultar.HandleUsuarios)))
+	http.Handle("/insertar", corsMiddleware(http.HandlerFunc(app.ControllerInsertar.InsertUser)))
+	http.Handle("/actualizar", corsMiddleware(http.HandlerFunc(app.ControllerActualizar.ActualizarUsuario)))
+	http.Handle("/eliminar", corsMiddleware(http.HandlerFunc(app.ControllerEliminar.EliminarUsuario)))
 
 	log.Fatal(http.ListenAndServe(":8000", nil))
 }
 
 type App struct {
-	Model      *model.Model
-	Controller *controller.Controller
+	Model                *model.Model
+	ControllerConsultar  *controller.ControllerConsultar
+	ControllerInsertar   *controller.ControllerInsertar
+	ControllerActualizar *controller.ControllerActualizar
+	ControllerEliminar   *controller.ControllerEliminar
 }
 
 func NewApp() *App {
 	modelInstance := model.NewModel()
 	return &App{
-		Model:      modelInstance,
-		Controller: controller.NewController(modelInstance),
+		Model:                modelInstance,
+		ControllerConsultar:  controller.NewControllerConsultar(modelInstance),
+		ControllerInsertar:   controller.NewControllerInsertar(modelInstance),
+		ControllerActualizar: controller.NewControllerActualizar(modelInstance),
+		ControllerEliminar:   controller.NewControllerEliminar(modelInstance),
 	}
 }
 
